@@ -1,0 +1,1 @@
+Esta aplicación está desarrollada en Nest JS con la finalidad de perfeccionar las habilidades técnicas de este framework. Cabe añadir que inicialmente será un monolito que tiene como fin mas adelante expandirse a un conjunto de microservicios haciendo uso de otras herramientas adicionales. 
