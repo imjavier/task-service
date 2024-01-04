@@ -8,28 +8,14 @@ import { CreateUserDTO } from './dto/create-user.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() user: CreateUserDTO) {
-    return this.authService.create(user);
+  @Post('register')
+  create(@Body() createUserDTO: CreateUserDTO) {
+    return this.authService.create(createUserDTO);
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
-  }
+  @Post('login')
+  loginUser(@Body() loginUserDTO: CreateUserDTO){
+    
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
   }
 }

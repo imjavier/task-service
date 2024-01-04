@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common'; 
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'; 
 import { CreateUserDTO } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
 import { User_data } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { log } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -36,21 +37,22 @@ export class AuthService {
  
   }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+  async login(loginUserDTO:CreateUserDTO){
+    const {username, password}=loginUserDTO;
+    const user=await this.userRepository.findOne({
+      where:{ username},
+      select:{username:true,password:true}
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    if(!user) throw new NotFoundException('Email is not valid');
 
-  update(id: number, updateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+    if(!bcrypt.compareSync(password,user.password)) throw new NotFoundException('Password is not valid');
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    
+
   }
+  
+
   private handleDBErrors(error:any){
  
     if(error.code=='23505') throw new BadRequestException(error.detail);
