@@ -29,7 +29,7 @@ export class AuthService {
 
       
       const userCreated=await this.userRepository.save(user);
-      const token= await this.jwtAuthService.signAsync({username:userCreated.username});
+      const token= await this.generateJWT(userCreated);
 
       return token;
        
@@ -52,11 +52,17 @@ export class AuthService {
 
     if(!bcrypt.compareSync(password,user.password)) throw new NotFoundException('Password is not valid');
 
-    const token= await this.jwtAuthService.signAsync({username:user.username});
+    const token= await this.generateJWT(user);
 
     return token;
 
     
+
+  }
+  
+  private async generateJWT(payload){
+
+    return await this.jwtAuthService.signAsync({username:payload.username});
 
   }
   
