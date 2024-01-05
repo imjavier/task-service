@@ -6,13 +6,15 @@ import { Repository } from 'typeorm';
 import { User_data } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { log } from 'console';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
 
   constructor(
     @InjectRepository(User_data)
-    private readonly userRepository: Repository<User_data>
+    private readonly userRepository: Repository<User_data>,
+    private jwtAuthService: JwtService
   ){}
 
   async create(userData: CreateUserDTO) {
@@ -27,8 +29,10 @@ export class AuthService {
 
       
       const userCreated=await this.userRepository.save(user);
-      delete userCreated.password;
-      return userCreated;
+      const token= await this.jwtAuthService.signAsync({username:userCreated.username});
+
+      return token;
+       
 
     } catch (error) {
      
@@ -47,6 +51,10 @@ export class AuthService {
     if(!user) throw new NotFoundException('Email is not valid');
 
     if(!bcrypt.compareSync(password,user.password)) throw new NotFoundException('Password is not valid');
+
+    const token= await this.jwtAuthService.signAsync({username:user.username});
+
+    return token;
 
     
 

@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDTO } from './dto/create-user.dto';
+import { JwtService } from '@nestjs/jwt';
  
 
 @Controller('auth')
@@ -15,7 +16,7 @@ export class AuthController {
 
   @Post('login')
   loginUser(@Body() loginUserDTO: CreateUserDTO){
-    
+
 
   }
 }
