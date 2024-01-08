@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
  
 
 @Controller('auth')
@@ -19,4 +21,12 @@ export class AuthController {
 
 
   }
+
+  @Get('av')
+  @UseGuards(JwtAuthGuard   )
+  strag(@Body()data){
+    return 'f'
+
+  }
+
 }

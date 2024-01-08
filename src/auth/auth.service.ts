@@ -52,7 +52,7 @@ export class AuthService {
 
     if(!bcrypt.compareSync(password,user.password)) throw new NotFoundException('Password is not valid');
 
-    const token= await this.generateJWT(user);
+    const token= await this.generateJWT(user);  
 
     return token;
 
