@@ -33,8 +33,11 @@ export class TaskService {
     return this.taskRepository.find({where:{userID}});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  async findOne(id: string) {
+
+    const taskData = await this.taskRepository.findOneBy({id});
+    if(!taskData) throw new NotFoundException('Task not found');
+    return taskData;
   }
 
   async update(id: string, updateTaskDto: UpdateTaskDto) {
@@ -53,8 +56,9 @@ export class TaskService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  async remove(id: string) {
+    const task= await this.findOne(id)
+    return this.taskRepository.remove(task);
   }
 
   private handleDBErrors(error:any){
