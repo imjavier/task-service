@@ -1,8 +1,9 @@
-import { IsIn, IsOptional, IsString, IsUUID } from "class-validator";
+import { IsIn, IsNotEmpty, IsOptional, IsString, IsUUID } from "class-validator";
 
 export class CreateTaskDto {
 
     @IsString()
+    @IsNotEmpty()
     taskname:string;
     
     @IsString()
@@ -13,5 +14,6 @@ export class CreateTaskDto {
     status:string;
     //Temporalmente se recibirá el userID para luego recibirlo por el JWT
     @IsUUID()
+    @IsNotEmpty()
     userID:string;
 }
