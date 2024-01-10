@@ -1,9 +1,10 @@
-import { BadRequestException, Body, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Body, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Repository } from 'typeorm';
 import { Task } from './entities/task.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TaskInterface } from './interfaces/task.interface';
 
 @Injectable()
 export class TaskService {
@@ -13,13 +14,13 @@ export class TaskService {
     private readonly taskRepository: Repository<Task>
   ){}
 
-  async create( createTaskDto: CreateTaskDto) {
+  async create( createTask:TaskInterface ) {
 
     try{
 
-      const task = this.taskRepository.create(createTaskDto);
+      const task = this.taskRepository.create(createTask);
       const taskCreated = await this.taskRepository.save(task);
-      return `Task ${task.taskname} created`;
+      return `Task ${taskCreated.taskname} created`;
     
     }catch(error){
 
@@ -40,11 +41,16 @@ export class TaskService {
     return taskData;
   }
 
-  async update(id: string, updateTaskDto: UpdateTaskDto) {
+  async update(id: string, updateTaskDto: UpdateTaskDto, userID:string) {
+
+    const taskData = await this.findOne(id);
+  
+    if (taskData.userID != userID) throw new UnauthorizedException(`non-updatable task`)
      
     const task= await this.taskRepository.preload({
       id,
-      ...updateTaskDto
+      ...updateTaskDto,
+      userID
     });
     if(!task) throw new NotFoundException(`Task with id "${id} not exist"`)
 
@@ -56,9 +62,12 @@ export class TaskService {
     }
   }
 
-  async remove(id: string) {
-    const task= await this.findOne(id)
-    return this.taskRepository.remove(task);
+  async remove(id: string, userID) {
+    console.log(userID);
+    const taskData= await this.findOne(id);
+    if (taskData.userID != userID) throw new UnauthorizedException(`non-eliminable task`);
+    return this.taskRepository.remove(taskData);
+  
   }
 
   private handleDBErrors(error:any){

@@ -4,7 +4,7 @@ import { User_data } from "../entities/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { ConfigService } from "@nestjs/config";
-import { UnauthorizedException } from "@nestjs/common";
+import { UnauthorizedException, Delete } from '@nestjs/common';
 
 export class JwtStrategy extends PassportStrategy(Strategy){
     constructor(
@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy){
         const {username}=payload;
         const user= await this.userRepository.findOneBy({username:payload.username});
         if(!user) throw new UnauthorizedException('Token not valid ');
-
+        delete user.password;
 
         return user;
     }

@@ -1,34 +1,43 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseGuards, Req } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('task')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    return this.taskService.create(createTaskDto);
+  @UseGuards(JwtAuthGuard)
+  create(@Body() createTaskDto:CreateTaskDto, @Req()req) {
+    console.log(req.user)
+    const task={
+      ...createTaskDto,
+      userID:req.user.id
+    }
+    return this.taskService.create(task);
   }
 
   @Get()
-  findAll(@Body('userID',ParseUUIDPipe) userID:string) {
-    return this.taskService.findAll(userID);  
+  @UseGuards(JwtAuthGuard)
+  findAll(@Req()req) {
+  
+    return this.taskService.findAll(req.user.id);  
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taskService.findOne(id);
-  }
-
+ 
   @Patch(':id')
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.taskService.update(id, updateTaskDto);
+  @UseGuards(JwtAuthGuard)
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateTaskDto: UpdateTaskDto,@Req()req) {
+    const userID=req.user.id;
+    return this.taskService.update(id, updateTaskDto,userID);
   }
 
   @Delete(':id')
-  remove(@Param('id',ParseUUIDPipe) id: string) {
-    return this.taskService.remove(id);
+  @UseGuards(JwtAuthGuard)
+  remove(@Param('id',ParseUUIDPipe) id: string, @Req()req) {
+    const userID=req.user.id;
+    return this.taskService.remove(id, userID);
   }
 }

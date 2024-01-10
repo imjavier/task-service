@@ -12,8 +12,6 @@ export class CreateTaskDto {
 
     @IsIn(['Por hacer','En proceso', 'Hecho'])
     status:string;
-    //Temporalmente se recibirá el userID para luego recibirlo por el JWT
-    @IsUUID()
-    @IsNotEmpty()
-    userID:string;
+    
+    
 }
