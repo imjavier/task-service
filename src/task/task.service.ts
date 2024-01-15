@@ -73,7 +73,7 @@ export class TaskService {
   private handleDBErrors(error:any){
  
     if(error.code=='23503') throw new BadRequestException(error.detail);
-
+    
     throw new InternalServerErrorException('Revisar logs');
 
     

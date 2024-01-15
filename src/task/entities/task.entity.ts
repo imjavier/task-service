@@ -1,4 +1,4 @@
-import { User_data } from "src/auth/entities/user.entity";
+import { User_data } from "src/user/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -22,7 +22,7 @@ export class Task {
     @Column('uuid')
     userID:string
     
-    @ManyToOne(()=>User_data,(user_data)=>user_data.tasks)
+    @ManyToOne(()=>User_data,(user_data)=>user_data.tasks, {onDelete:'CASCADE'})
     @JoinColumn({name:'userID'})
     user_data:User_data;    
 
