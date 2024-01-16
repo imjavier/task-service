@@ -116,7 +116,7 @@ EN CASO DE QUE SEA EL ADMIN EL QUE VAYA A HACER UN REGISTRO, ESTE SE DEJARÁ INS
   //ELIMINACIÓN DE USUARIOS CREADA CORRECTAMENTE
 
   /*fALTA IMPLEMENTAR LO DE LOS ROLES Y ALGUNA QUE OTRA
-  FUNCION MAS*/ 
+  FUNCION MAS */ 
   async remove(id: string, payloadID: string) {
 
     console.log(`Id ${id} payload: ${payloadID}`)
