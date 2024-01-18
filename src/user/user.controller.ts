@@ -39,7 +39,7 @@ export class UserController {
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
-
+  
   @UseGuards(AuthGuard())
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string, @Req() req) {
