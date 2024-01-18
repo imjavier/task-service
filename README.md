@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
@@ -71,3 +72,6 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+=======
+Esta aplicación está desarrollada en Nest JS con la finalidad de perfeccionar las habilidades técnicas de este framework. Cabe añadir que inicialmente será un monolito que tiene como fin mas adelante expandirse a un conjunto de microservicios haciendo uso de otras herramientas adicionales. 
+>>>>>>> a4e61c40a2ef9ee4115b73c3a68c60b89d2e3c06
